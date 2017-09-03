@@ -1,0 +1,103 @@
+S3Bench
+
+S3Bench is a light-weight S3 service benchmark tool, for measuring 
+latencies and throughput for object up- and downloads. This software 
+uses the AWS S3 Java SDK as foundation and provides basic CLI and 
+properties file-based customization for benchmark workloads.
+
+
+Getting started
+
+>./s3bench.sh s3.domain.com mybucket accessKeyId secret*** [s3bench.properties]
+
+
+Customization options (s3bench.properties)
+
+The given values match the fallback default properties, if the optional 
+properties file command line argument was not specified.
+
+# Determines whether requests use secure or plain-text connections.
+# true: requests are using HTTPS (verifiable certificates only)
+# false: plain-text HTTP requests
+use_ssl=false
+
+# Specifies how buckets are encoded in the client request URLs.
+# true: via URL path (i.e. http://s3.domain.com/mybucket)
+# false: via sub-domain (i.e. http://mybucket.s3.domain.com)
+path_style=true
+
+# MD5 checksum verification by the client prolong the overall request latency.
+# true: verification is enabled
+# false: verification is disabled
+client_md5_verification=false
+
+# If the bucket retrieved as a command line option is not existent this flag 
+# determines, whether this tool may create it.
+# true: s3bench may create the target bucket
+# false: s3bench will fail if the target bucket does not exist
+create_bucket=true
+
+# The number of objects created during a single stream benchmark.
+sample_count=10
+
+# Object payload is transmitted unsigned, removing the need of server side 
+# checksum generation (fast).
+benchmark_unsigned=true
+
+# Object payload is signed (and verified at the server) via AWS S3 signature V4 
+# chunked uploads.
+benchmark_chunked=true
+
+# Object payload is SHA256 pre-signed and verified by the server.
+benchmark_presigned=true
+
+# Any objects in the target bucket are removed after the run.
+# true: remove _any_ objects in the target bucket
+# false: leave the bucket as is after finishing the benchmark
+clean_after_run=true
+
+# Uses large objects to obtain throughput key figures.
+# true: run throughput workloads
+# false: skip throughput workloads 
+benchmark_tp=true
+
+# Object size in bytes during throughput benchmarks in bytes (limit: < 2^31).
+tp_object_size=1073741824
+
+# Uses small objects to obtain latency key figures.
+# true: run latency workloads
+# false: skip latency workloads
+benchmark_ops=true
+
+# Object size in bytes during latency benchmarks in bytes (limit: < 2^31).
+ops_object_size=4096
+
+# Run single-stream workloads for sequential performance benchmarks.
+# true: run sequential workloads
+# false: skip sequential workloads
+benchmark_single_stream=true
+
+# Run multi-stream workloads for parallel performance benchmarks.
+# true: run parallel workloads
+# false: skip parallel workloads
+benchmark_multi_stream=true
+
+# The runtime of a single stream benchmark in seconds.
+multi_stream_runtime_s=600
+
+# Number of clients during a multi-stream throughput benchmark.
+multi_stream_tp_clients=2
+
+# Number of threads per client during a multi-stream throughput benchmark.
+multi_stream_tp_threads=10
+
+# Number of clients during multi-stream latency benchmarks.
+multi_stream_ops_clients=10
+
+# Number of threads per client during multi-stream latency benchmarks.
+multi_stream_ops_threads=10
+
+# Run download object benchmarks after object upload workloads.
+# true: run download object workloads
+# false: skip download object workloads
+benchmark_get=true
